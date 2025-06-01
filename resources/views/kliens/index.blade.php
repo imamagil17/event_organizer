@@ -1,9 +1,11 @@
 <x-default-layout title="Klien" section_title="Klien">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <a href="{{ route('kliens.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-lg"></i> Tambah Klien
-        </a>
-    </div>
+    @can('store-klien')
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="{{ route('kliens.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Tambah Klien
+            </a>
+        </div>
+    @endcan
 
     <div class="row g-3">
         @forelse ($kliens as $klien)
@@ -22,17 +24,21 @@
                                 <a href="{{ route('kliens.show', $klien) }}" class="text-info me-2" title="Detail">
                                     <i class="bi bi-eye-fill"></i>
                                 </a>
-                                <a href="{{ route('kliens.edit', $klien) }}" class="text-warning me-2" title="Edit">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <form action="{{ route('kliens.destroy', $klien) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Yakin mau hapus?')"
-                                        class="btn btn-link p-0 m-0 text-danger" title="Hapus">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </button>
-                                </form>
+                                @can('edit-klien')
+                                    <a href="{{ route('kliens.edit', $klien) }}" class="text-warning me-2" title="Edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                @endcan
+                                @can('destroy-klien')
+                                    <form action="{{ route('kliens.destroy', $klien) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" onclick="return confirm('Yakin mau hapus?')"
+                                            class="btn btn-link p-0 m-0 text-danger" title="Hapus">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+                                    </form>
+                                @endcan
                             </div>
                         </div>
                         <p class="card-text mt-2 text-muted">

@@ -1,9 +1,11 @@
 <x-default-layout title="Acara" section_title="Acara">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <a href="{{ route('acaras.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-lg"></i> Tambah Acara
-        </a>
-    </div>
+    @can('store-acara')
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="{{ route('acaras.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Tambah Acara
+            </a>
+        </div>
+    @endcan
 
     <div class="row g-3">
         @forelse ($acaras as $acara)
@@ -22,19 +24,23 @@
                                 <a href="{{ route('acaras.show', $acara->id) }}" class="text-info me-2" title="Detail">
                                     <i class="bi bi-eye-fill"></i>
                                 </a>
-                                <a href="{{ route('acaras.edit', $acara->id) }}" class="text-warning me-2"
-                                    title="Edit">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <form action="{{ route('acaras.destroy', $acara->id) }}" method="POST"
-                                    class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Yakin mau hapus?')"
-                                        class="btn btn-link p-0 m-0 text-danger" title="Hapus">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </button>
-                                </form>
+                                @can('edit-acara')
+                                    <a href="{{ route('acaras.edit', $acara->id) }}" class="text-warning me-2"
+                                        title="Edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                @endcan
+                                @can('destroy-acara')
+                                    <form action="{{ route('acaras.destroy', $acara->id) }}" method="POST"
+                                        class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" onclick="return confirm('Yakin mau hapus?')"
+                                            class="btn btn-link p-0 m-0 text-danger" title="Hapus">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+                                    </form>
+                                @endcan
                             </div>
                         </div>
                         <p class="card-text mt-2 text-muted">

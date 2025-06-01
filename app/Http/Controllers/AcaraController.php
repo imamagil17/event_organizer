@@ -6,17 +6,26 @@ use App\Models\Acara;
 use App\Models\Klien;
 use App\Models\KategoriAcara;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class AcaraController extends Controller
 {
     public function index()
     {
+        if (! Gate::allows('view-acara')) {
+            abort(401);
+        }
+
         $acaras = Acara::with('klien', 'kategoriAcara')->get();
         return view('acaras.index', compact('acaras'));
     }
 
     public function create()
     {
+        if (! Gate::allows('store-acara')) {
+            abort(401);
+        }
+
         $kliens = Klien::all();
         $kategoriAcaras = KategoriAcara::all();
         return view('acaras.create', compact('kliens', 'kategoriAcaras'));
@@ -24,6 +33,10 @@ class AcaraController extends Controller
 
     public function store(Request $request)
     {
+        if (! Gate::allows('store-acara')) {
+            abort(401);
+        }
+
         $request->validate([
             'judul' => 'required|string|max:255',
             'tanggal' => 'required|date',
@@ -39,12 +52,20 @@ class AcaraController extends Controller
     }
 
     public function show(Acara $acara)
-    {
+    {   
+        if (! Gate::allows('view-acara')) {
+            abort(401);
+        }
+
         return view('acaras.show', compact('acara'));
     }
 
     public function edit(Acara $acara)
     {
+        if (! Gate::allows('edit-acara')) {
+            abort(401);
+        }
+
         $kliens = Klien::all();
         $kategoriAcaras = KategoriAcara::all();
         return view('acaras.edit', compact('acara', 'kliens', 'kategoriAcaras'));
@@ -52,6 +73,10 @@ class AcaraController extends Controller
 
     public function update(Request $request, Acara $acara)
     {
+        if (! Gate::allows('edit-acara')) {
+            abort(401);
+        }
+
         $request->validate([
             'judul' => 'required|string|max:255',
             'tanggal' => 'required|date',
@@ -68,6 +93,10 @@ class AcaraController extends Controller
 
     public function destroy(Acara $acara)
     {
+        if (! Gate::allows('destroy-acara')) {
+            abort(401);
+        }
+
         $acara->delete();
 
         return redirect()->route('acaras.index')->with('success', 'Acara berhasil dihapus.');

@@ -52,6 +52,13 @@
                             <i class="bi bi-journal-bookmark-fill me-1"></i> Kategori Acara
                         </a>
                     </li>
+                    <li class="nav-item d-flex align-items-center">
+                        <a href="{{ route('profile.index') }}"
+                            class="nav-link text-white {{ request()->is('profile') ? 'active' : '' }}">
+                            <i class="bi bi-person-circle me-1"></i> Profile
+                        </a>
+
+                    </li>
                 </ul>
             </nav>
 
@@ -76,6 +83,9 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('kategori_acaras.index') }}" class="nav-link">Kategori Acara</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('profile.index') }}" class="nav-link">Profile</a>
                 </li>
             </ul>
         </div>

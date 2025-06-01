@@ -1,9 +1,11 @@
 <x-default-layout title="Kategori Acara" section_title="Kategori Acara">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <a href="{{ route('kategori_acaras.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-lg"></i> Tambah Kategori
-        </a>
-    </div>
+    @can('store-kategori_acara')
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="{{ route('kategori_acaras.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Tambah Kategori
+            </a>
+        </div>
+    @endcan
 
     <div class="row g-3">
         @forelse ($kategoriAcaras as $kategori)
@@ -23,19 +25,23 @@
                                     title="Detail">
                                     <i class="bi bi-eye-fill"></i>
                                 </a>
-                                <a href="{{ route('kategori_acaras.edit', $kategori) }}" class="text-warning me-2"
-                                    title="Edit">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <form action="{{ route('kategori_acaras.destroy', $kategori) }}" method="POST"
-                                    class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Yakin mau hapus?')"
-                                        class="btn btn-link p-0 m-0 text-danger" title="Hapus">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </button>
-                                </form>
+                                @can('edit-kategori_acara')
+                                    <a href="{{ route('kategori_acaras.edit', $kategori) }}" class="text-warning me-2"
+                                        title="Edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                @endcan
+                                @can('destroy-kategori_acara')
+                                    <form action="{{ route('kategori_acaras.destroy', $kategori) }}" method="POST"
+                                        class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" onclick="return confirm('Yakin mau hapus?')"
+                                            class="btn btn-link p-0 m-0 text-danger" title="Hapus">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+                                    </form>
+                                @endcan
                             </div>
                         </div>
                         <p class="card-text mt-2 text-muted">

@@ -7,7 +7,7 @@
                 <div class="mb-4">
                     <h5 class="card-title font-weight-bold text-primary">{{ $kategoriAcara->nama }}</h5>
                     <p class="text-muted">
-                        <small>Terakhir diperbarui: {{ $kategoriAcara->updated_at->diffForHumans() }}</small>
+                        <small>Terakhir diperbarui : {{ $kategoriAcara->updated_at->diffForHumans() }}</small>
                     </p>
                 </div>
 
@@ -19,9 +19,11 @@
 
                 <!-- Optional Additional Information -->
                 <div class="d-flex justify-content-between">
-                    <a href="{{ route('kategori_acaras.edit', $kategoriAcara->id) }}" class="btn btn-warning px-4 py-2">
-                        Edit Kategori
-                    </a>
+                    @can('edit-kategori_acara')
+                        <a href="{{ route('kategori_acaras.edit', $kategoriAcara->id) }}" class="btn btn-warning px-4 py-2">
+                            Edit Kategori
+                        </a>
+                    @endcan
                     <a href="{{ route('kategori_acaras.index') }}" class="btn btn-outline-primary px-4 py-2">
                         Lihat Semua Kategori
                     </a>

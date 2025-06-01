@@ -77,6 +77,7 @@
                                     <th>Tanggal</th>
                                     <th>Lokasi</th>
                                     <th>Klien</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -86,9 +87,21 @@
                                         <td>{{ \Carbon\Carbon::parse($acara->tanggal)->format('d M Y') }}</td>
                                         <td>{{ $acara->lokasi }}</td>
                                         <td>{{ $acara->klien->nama }}</td>
+                                        <td>
+                                            @php
+                                                $status = $acara->status_waktu;
+                                                $badgeClass = match (true) {
+                                                    $status === 'Hari Ini' => 'badge bg-success',
+                                                    $status === 'Besok' => 'badge bg-warning text-dark',
+                                                    default => 'badge bg-info',
+                                                };
+                                            @endphp
+                                            <span class="{{ $badgeClass }}">{{ $status }}</span>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
+
                         </table>
                     </div>
                 @else
