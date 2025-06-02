@@ -20,13 +20,19 @@
                 <!-- Telepon Klien -->
                 <div class="mb-4">
                     <h6 class="font-weight-bold text-secondary">Telepon</h6>
-                    <p class="card-text">{{ $klien->telepon }}</p>
+                    <p class="card-text">{{ $klien->telepon ?? '-' }}</p>
                 </div>
 
                 <!-- Alamat Klien -->
                 <div class="mb-4">
                     <h6 class="font-weight-bold text-secondary">Alamat</h6>
-                    <p class="card-text">{{ $klien->alamat }}</p>
+                    <p class="card-text">{{ $klien->alamat ?? '-' }}</p>
+                </div>
+
+                <!-- Jenis Klien -->
+                <div class="mb-4">
+                    <h6 class="font-weight-bold text-secondary">Jenis Klien</h6>
+                    <p class="card-text text-capitalize">{{ $klien->jenis_klien ?? '-' }}</p>
                 </div>
 
                 <!-- Aksi Navigasi -->

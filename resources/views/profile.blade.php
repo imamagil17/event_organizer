@@ -1,32 +1,35 @@
 <x-default-layout title="Profil Pengguna" section_title="Profil Akun">
     <div class="container mt-5">
-        <!-- Card untuk Profil Pengguna -->
-        <div class="card shadow-lg border-0 rounded-lg">
-            <div class="card-body">
-                <!-- Header Card -->
-                <div class="mb-4">
-                    <h5 class="card-title font-weight-bold text-primary">{{ $user->name }}</h5>
-                    <p class="text-muted">
-                        <small>Terakhir login: {{ $user->updated_at->diffForHumans() }}</small>
-                    </p>
-                </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-4">
+                        <!-- Header Profil -->
+                        <div class="text-center mb-4">
+                            <div class="mb-3">
+                                <i class="bi bi-person-circle" style="font-size: 4rem; color: #0d6efd;"></i>
+                            </div>
+                            <h4 class="card-title fw-bold">{{ $user->name }}</h4>
+                            <p class="text-muted fst-italic small">
+                                Terakhir login: {{ $user->updated_at->diffForHumans() }}
+                            </p>
+                        </div>
 
-                <!-- Informasi Akun -->
-                <div class="mb-4">
-                    <h6 class="font-weight-bold text-secondary">Informasi Akun</h6>
-                    <p class="card-text"><strong>Email : </strong> {{ $user->email }}</p>
-                    <p class="card-text"><strong>Peran : </strong> <span
-                            class="text-capitalize">{{ $user->role }}</span></p>
-                </div>
-
-                <!-- Tombol Aksi -->
-                <div class="d-flex justify-content-end">
-                    <form action="{{ route('auth.logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-danger px-4 py-2">
-                            Logout
-                        </button>
-                    </form>
+                        <!-- Informasi Akun -->
+                        <div class="mb-4">
+                            <h5 class="text-primary fw-semibold mb-3">Informasi Akun</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                    <span><i class="bi bi-envelope-fill me-2 text-secondary"></i> Email</span>
+                                    <span class="text-break">{{ $user->email }}</span>
+                                </li>
+                                <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                    <span><i class="bi bi-shield-lock-fill me-2 text-secondary"></i> Role</span>
+                                    <span class="text-capitalize fw-semibold">{{ $user->role }}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

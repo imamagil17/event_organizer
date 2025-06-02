@@ -65,8 +65,6 @@ class KategoriAcaraController extends Controller
     {
         if (! Gate::allows('edit-kategori_acara')) {
             abort(401);
-        }        if (! Gate::allows('store-student')) {
-            abort(401);
         }
 
         $request->validate([

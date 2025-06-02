@@ -38,6 +38,7 @@ class KlienController extends Controller
             'email' => 'required|email|unique:kliens,email',
             'telepon' => 'nullable|string|max:20',
             'alamat' => 'nullable|string',
+            'jenis_klien' => 'required|string|in:perorangan,perusahaan',  // contoh jenis klien
         ]);
 
         Klien::create($request->all());
@@ -74,6 +75,7 @@ class KlienController extends Controller
             'email' => 'required|email|unique:kliens,email,' . $klien->id,
             'telepon' => 'nullable|string|max:20',
             'alamat' => 'nullable|string',
+            'jenis_klien' => 'required|string|in:perorangan,perusahaan',
         ]);
 
         $klien->update($request->all());

@@ -1,5 +1,5 @@
 <x-default-layout title="Edit Acara" section_title="Edit Acara">
-    <div class="container mt-5 pb-5"> <!-- Padding bawah ditambahkan disini untuk memberi jarak di bawah container -->
+    <div class="container mt-5 pb-5">
         <div class="card shadow-sm border-0 rounded-lg">
             <div class="card-header bg-primary text-white">
                 <h4 class="m-0">Edit Acara</h4>
@@ -31,7 +31,7 @@
                     <div class="form-group mb-4">
                         <label for="lokasi" class="form-label font-weight-semibold">Lokasi</label>
                         <input type="text" name="lokasi" class="form-control @error('lokasi') is-invalid @enderror"
-                            id="lokasi" value="{{ old('lokasi', $acara->lokasi) }} "
+                            id="lokasi" value="{{ old('lokasi', $acara->lokasi) }}"
                             placeholder="Masukkan lokasi acara" required>
                         @error('lokasi')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -44,7 +44,7 @@
                             class="form-control @error('klien_id') is-invalid @enderror" required>
                             <option value="">Pilih Klien</option>
                             @foreach ($kliens as $klien)
-                                <option value="{{ $klien->id }} "
+                                <option value="{{ $klien->id }}"
                                     {{ old('klien_id', $acara->klien_id) == $klien->id ? 'selected' : '' }}>
                                     {{ $klien->nama }}
                                 </option>
@@ -77,6 +77,57 @@
                         <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" rows="4"
                             placeholder="Masukkan deskripsi acara">{{ old('deskripsi', $acara->deskripsi) }}</textarea>
                         @error('deskripsi')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="jumlah_tamu" class="form-label font-weight-semibold">Jumlah Tamu</label>
+                        <input type="number" name="jumlah_tamu"
+                            class="form-control @error('jumlah_tamu') is-invalid @enderror" id="jumlah_tamu"
+                            value="{{ old('jumlah_tamu', $acara->jumlah_tamu) }}" min="0"
+                            placeholder="Masukkan jumlah tamu">
+                        @error('jumlah_tamu')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="total_biaya" class="form-label font-weight-semibold">Total Biaya</label>
+                        <input type="number" name="total_biaya"
+                            class="form-control @error('total_biaya') is-invalid @enderror" id="total_biaya"
+                            value="{{ old('total_biaya', $acara->total_biaya) }}" min="0" step="0.01"
+                            placeholder="Masukkan total biaya">
+                        @error('total_biaya')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="catatan_laporan" class="form-label font-weight-semibold">Catatan Laporan</label>
+                        <textarea name="catatan_laporan" class="form-control @error('catatan_laporan') is-invalid @enderror"
+                            id="catatan_laporan" rows="3" placeholder="Masukkan catatan laporan">{{ old('catatan_laporan', $acara->catatan_laporan) }}</textarea>
+                        @error('catatan_laporan')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="rating" class="form-label font-weight-semibold">Rating (1-5)</label>
+                        <input type="number" name="rating"
+                            class="form-control @error('rating') is-invalid @enderror" id="rating"
+                            value="{{ old('rating', $acara->rating) }}" min="1" max="5"
+                            placeholder="Masukkan rating">
+                        @error('rating')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="feedback" class="form-label font-weight-semibold">Feedback</label>
+                        <textarea name="feedback" class="form-control @error('feedback') is-invalid @enderror" id="feedback"
+                            rows="3" placeholder="Masukkan feedback">{{ old('feedback', $acara->feedback) }}</textarea>
+                        @error('feedback')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

@@ -16,15 +16,34 @@ class Acara extends Model
         'deskripsi',
         'klien_id',
         'kategori_acara_id',
+        'jumlah_tamu',
+        'total_biaya',
+        'catatan_laporan',
+        'rating',
+        'feedback',
     ];
 
+    // Relasi ke Klien
     public function klien()
     {
         return $this->belongsTo(Klien::class);
     }
 
+    // Relasi ke Kategori Acara
     public function kategoriAcara()
     {
         return $this->belongsTo(KategoriAcara::class);
+    }
+
+    // Relasi Many-to-Many ke Vendor
+    public function vendors()
+    {
+        return $this->belongsToMany(Vendor::class, 'acara_vendor');
+    }
+
+    // Relasi ke Jadwal Acara
+    public function jadwalAcaras()
+    {
+        return $this->hasMany(JadwalAcara::class);
     }
 }

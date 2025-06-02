@@ -44,6 +44,24 @@
                         @enderror
                     </div>
 
+                    <div class="form-group mb-4">
+                        <label for="jenis_klien" class="form-label font-weight-semibold">Jenis Klien</label>
+                        <select name="jenis_klien" id="jenis_klien"
+                            class="form-control @error('jenis_klien') is-invalid @enderror" required>
+                            <option value="" disabled {{ old('jenis_klien') ? '' : 'selected' }}>Pilih Jenis Klien
+                            </option>
+                            <option value="perorangan" {{ old('jenis_klien') == 'perorangan' ? 'selected' : '' }}>
+                                Perorangan</option>
+                            <option value="perusahaan" {{ old('jenis_klien') == 'perusahaan' ? 'selected' : '' }}>
+                                Perusahaan</option>
+                            <option value="organisasi" {{ old('jenis_klien') == 'organisasi' ? 'selected' : '' }}>
+                                Organisasi</option>
+                        </select>
+                        @error('jenis_klien')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <div class="d-flex justify-content-between">
                         <button type="submit" class="btn btn-primary px-4 py-2">Simpan</button>
                         <a href="{{ route('kliens.index') }}" class="btn btn-secondary px-4 py-2">Batal</a>

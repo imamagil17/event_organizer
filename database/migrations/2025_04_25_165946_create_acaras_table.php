@@ -14,8 +14,18 @@ class CreateAcarasTable extends Migration
             $table->date('tanggal');
             $table->string('lokasi');
             $table->text('deskripsi')->nullable();
+
+            // Relasi
             $table->foreignId('klien_id')->constrained('kliens')->onDelete('cascade');
             $table->foreignId('kategori_acara_id')->constrained('kategori_acaras')->onDelete('cascade');
+
+            // Tambahan
+            $table->integer('jumlah_tamu')->nullable();
+            $table->decimal('total_biaya', 15, 2)->nullable();
+            $table->text('catatan_laporan')->nullable();
+            $table->unsignedTinyInteger('rating')->nullable(); // 1-5 misalnya
+            $table->text('feedback')->nullable();
+
             $table->timestamps();
         });
     }

@@ -14,6 +14,7 @@ class CreateKliensTable extends Migration
             $table->string('email')->unique();
             $table->string('telepon')->nullable();
             $table->text('alamat')->nullable();
+            $table->enum('jenis_klien', ['perorangan', 'perusahaan', 'organisasi'])->default('perorangan');
             $table->timestamps();
         });
     }
