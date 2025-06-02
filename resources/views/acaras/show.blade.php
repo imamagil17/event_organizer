@@ -59,6 +59,28 @@
                     <p class="card-text">{{ $acara->feedback ?? '-' }}</p>
                 </div>
 
+                <!-- Tambahan Vendor Terlibat -->
+                <div class="mb-3">
+                    <h6 class="font-weight-bold text-secondary">Vendor Terlibat</h6>
+                    @if ($acara->vendors->isNotEmpty())
+                        <ul class="list-group">
+                            @foreach ($acara->vendors as $vendor)
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{{ $vendor->nama }}</strong><br>
+                                        <small class="text-muted">{{ $vendor->jenis_layanan }} -
+                                            {{ $vendor->kontak }}</small>
+                                    </div>
+                                    <span class="badge bg-primary text-white">Rp
+                                        {{ number_format($vendor->biaya, 2, ',', '.') }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p class="card-text">Belum ada vendor yang terlibat.</p>
+                    @endif
+                </div>
+
                 <div class="d-flex justify-content-between">
                     @can('edit-acara')
                         <a href="{{ route('acaras.edit', $acara->id) }}" class="btn btn-warning px-4 py-2">

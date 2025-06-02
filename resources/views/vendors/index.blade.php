@@ -47,7 +47,7 @@
                         <div class="text-muted small">
                             <div><i class="bi bi-person-lines-fill me-1"></i>
                                 {{ $vendor->kontak ?? '-' }}</div>
-                            <div><i class="bi bi-cash-stack me-1"></i> Rp
+                            <div>Rp
                                 {{ number_format($vendor->biaya, 0, ',', '.') }}</div>
                         </div>
                     </div>

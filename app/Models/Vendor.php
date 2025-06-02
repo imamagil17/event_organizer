@@ -18,6 +18,8 @@ class Vendor extends Model
 
     public function acaras()
     {
-        return $this->belongsToMany(Acara::class, 'acara_vendor')->withTimestamps();
+        return $this->belongsToMany(Acara::class, 'acara_vendor')
+                    ->withPivot('peran') // jika ingin akses kolom 'peran'
+                    ->withTimestamps();
     }
 }

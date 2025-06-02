@@ -47,27 +47,35 @@
                         </div>
 
                         <div class="text-muted small">
-                            <div><i class="bi bi-geo-alt-fill me-1"></i> {{ $acara->lokasi }}
+                            <div><i class="bi bi-geo-alt-fill me-1"></i> {{ $acara->lokasi }}</div>
+                            <div><i class="bi bi-person-fill me-1"></i> {{ optional($acara->klien)->nama ?? '-' }}</div>
+                            <div><i class="bi bi-tags-fill me-1"></i> {{ optional($acara->kategoriAcara)->nama ?? '-' }}
                             </div>
-                            <div><i class="bi bi-person-fill me-1"></i>
-                                {{ optional($acara->klien)->nama ?? '-' }}</div>
-                            <div><i class="bi bi-tags-fill me-1"></i>
-                                {{ optional($acara->kategoriAcara)->nama ?? '-' }}</div>
-                            <div><i class="bi bi-people-fill me-1"></i>
-                                {{ $acara->jumlah_tamu }}</div>
-                            <div><i class="bi bi-currency-dollar me-1"></i> Rp
-                                {{ number_format($acara->total_biaya, 0, ',', '.') }}</div>
+                            <div><i class="bi bi-people-fill me-1"></i> {{ $acara->jumlah_tamu }}</div>
+                            <div>Rp {{ number_format($acara->total_biaya, 0, ',', '.') }}</div>
+
+
+                            <div class="mt-3 d-flex align-items-center flex-wrap gap-2">
+                                <i class="bi bi-person-badge-fill me-1 text-primary" style="font-size: 1.2rem;"></i>
+                                <div class="vendor-list d-flex flex-wrap gap-2 mb-0">
+                                    @forelse ($acara->vendors as $vendor)
+                                        <span class="vendor-badge">
+                                            {{ $vendor->nama ?? ($vendor->nama_vendor ?? 'Vendor') }}
+                                        </span>
+                                    @empty
+                                    @endforelse
+                                </div>
+                            </div>
+
                             @if ($acara->catatan_laporan)
                                 <div><i class="bi bi-journal-text me-1"></i>
                                     {{ Str::limit($acara->catatan_laporan, 50) }}</div>
                             @endif
                             @if ($acara->rating)
-                                <div><i class="bi bi-star-fill me-1 text-warning"></i>
-                                    {{ $acara->rating }} / 5</div>
+                                <div><i class="bi bi-star-fill me-1 text-warning"></i> {{ $acara->rating }} / 5</div>
                             @endif
                             @if ($acara->feedback)
-                                <div><i class="bi bi-chat-dots me-1"></i>
-                                    {{ Str::limit($acara->feedback, 50) }}</div>
+                                <div><i class="bi bi-chat-dots me-1"></i> {{ Str::limit($acara->feedback, 50) }}</div>
                             @endif
                         </div>
                     </div>
@@ -87,6 +95,23 @@
 
         .transition-all {
             transition: all 0.3s ease;
+        }
+
+        .vendor-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .vendor-badge {
+            background-color: #e9f5f9;
+            color: #0d6efd;
+            font-size: 0.85rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(13, 110, 253, 0.2);
+            user-select: none;
+            white-space: nowrap;
         }
     </style>
 </x-default-layout>

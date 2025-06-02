@@ -35,36 +35,50 @@ class AcaraController extends Controller
 
     public function store(Request $request)
     {
-        if (! Gate::allows('store-acara')) {
-            abort(401);
-        }
-
         $request->validate([
             'judul' => 'required|string|max:255',
             'tanggal' => 'required|date',
             'lokasi' => 'required|string|max:255',
-            'deskripsi' => 'nullable|string',
             'klien_id' => 'required|exists:kliens,id',
             'kategori_acara_id' => 'required|exists:kategori_acaras,id',
+            'vendors' => 'nullable|array',
+            'vendors.*' => 'exists:vendors,id',
+            'deskripsi' => 'nullable|string',
             'jumlah_tamu' => 'nullable|integer|min:0',
-            'total_biaya' => 'nullable|numeric|min:0',
             'catatan_laporan' => 'nullable|string',
-            'rating' => 'nullable|integer|min:1|max:5',
+            'rating' => 'nullable|numeric|min:1|max:5',
             'feedback' => 'nullable|string',
-            'vendor_id' => 'nullable|array',
-            'vendor_id.*' => 'exists:vendors,id',
         ]);
 
-        // Buat acara tanpa relasi vendor dulu
-        $acara = Acara::create($request->except('vendor_id'));
+        // Hitung total_biaya dari vendor
+        $total_biaya = 0;
+        if ($request->vendors) {
+            $vendor_biayas = Vendor::whereIn('id', $request->vendors)->pluck('biaya');
+            $total_biaya = $vendor_biayas->sum();
+        }
 
-        // Sync vendor many-to-many
-        if ($request->has('vendor_id')) {
-            $acara->vendors()->sync($request->vendor_id);
+        $acara = Acara::create([
+            'judul' => $request->judul,
+            'tanggal' => $request->tanggal,
+            'lokasi' => $request->lokasi,
+            'klien_id' => $request->klien_id,
+            'kategori_acara_id' => $request->kategori_acara_id,
+            'deskripsi' => $request->deskripsi,
+            'jumlah_tamu' => $request->jumlah_tamu,
+            'total_biaya' => $total_biaya,
+            'catatan_laporan' => $request->catatan_laporan,
+            'rating' => $request->rating,
+            'feedback' => $request->feedback,
+        ]);
+
+        // Simpan relasi vendor
+        if ($request->vendors) {
+            $acara->vendors()->attach($request->vendors);
         }
 
         return redirect()->route('acaras.index')->with('success', 'Acara berhasil ditambahkan.');
     }
+
 
     public function show(Acara $acara)
     {
@@ -94,37 +108,48 @@ class AcaraController extends Controller
 
     public function update(Request $request, Acara $acara)
     {
-        if (! Gate::allows('edit-acara')) {
-            abort(401);
-        }
-
         $request->validate([
             'judul' => 'required|string|max:255',
             'tanggal' => 'required|date',
             'lokasi' => 'required|string|max:255',
-            'deskripsi' => 'nullable|string',
             'klien_id' => 'required|exists:kliens,id',
             'kategori_acara_id' => 'required|exists:kategori_acaras,id',
+            'vendors' => 'nullable|array',
+            'vendors.*' => 'exists:vendors,id',
+            'deskripsi' => 'nullable|string',
             'jumlah_tamu' => 'nullable|integer|min:0',
-            'total_biaya' => 'nullable|numeric|min:0',
             'catatan_laporan' => 'nullable|string',
-            'rating' => 'nullable|integer|min:1|max:5',
+            'rating' => 'nullable|numeric|min:1|max:5',
             'feedback' => 'nullable|string',
-            'vendor_id' => 'nullable|array',
-            'vendor_id.*' => 'exists:vendors,id',
         ]);
 
-        $acara->update($request->except('vendor_id'));
-
-        // Sync vendor many-to-many
-        if ($request->has('vendor_id')) {
-            $acara->vendors()->sync($request->vendor_id);
-        } else {
-            $acara->vendors()->detach();
+        // Hitung ulang total biaya
+        $total_biaya = 0;
+        if ($request->vendors) {
+            $vendor_biayas = Vendor::whereIn('id', $request->vendors)->pluck('biaya');
+            $total_biaya = $vendor_biayas->sum();
         }
+
+        $acara->update([
+            'judul' => $request->judul,
+            'tanggal' => $request->tanggal,
+            'lokasi' => $request->lokasi,
+            'klien_id' => $request->klien_id,
+            'kategori_acara_id' => $request->kategori_acara_id,
+            'deskripsi' => $request->deskripsi,
+            'jumlah_tamu' => $request->jumlah_tamu,
+            'total_biaya' => $total_biaya,
+            'catatan_laporan' => $request->catatan_laporan,
+            'rating' => $request->rating,
+            'feedback' => $request->feedback,
+        ]);
+
+        // Sync vendor (replace existing relasi)
+        $acara->vendors()->sync($request->vendors ?? []);
 
         return redirect()->route('acaras.index')->with('success', 'Acara berhasil diperbarui.');
     }
+
 
     public function destroy(Acara $acara)
     {

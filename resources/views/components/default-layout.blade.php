@@ -130,6 +130,12 @@
     .navbar-toggler-icon {
         filter: brightness(1000%);
     }
+
+    /* Tambahan untuk toast-container */
+    .toast-container {
+        z-index: 1080;
+        /* agar toast muncul di atas navbar */
+    }
 </style>
 
 <body>
@@ -243,8 +249,7 @@
                         <li>
                             <form action="{{ route('auth.logout') }}" method="POST" class="m-0 px-3">
                                 @csrf
-                                <button type="submit"
-                                    class="dropdown-item d-flex align-items-center text-white bg-danger rounded">
+                                <button type="submit" class="dropdown-item d-flex align-items-center text-danger">
                                     <i class="bi bi-box-arrow-right me-2"></i> Logout
                                 </button>
                             </form>
@@ -255,31 +260,35 @@
         </div>
     </header>
 
+    <!-- Toast container diletakkan DI LUAR main agar fixed di pojok kanan bawah -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
+        @if (session('success'))
+            <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert"
+                aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+                <div class="d-flex">
+                    <div class="toast-body">{{ session('success') }}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+            </div>
+        @endif
+    </div>
+
     <main class="container mt-4">
         <h1 class="fw-bold">{{ $section_title }}</h1>
+        {{ $slot }}
+    </main>
 
-        <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            @if (session('success'))
-                <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert"
-                    aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
-                    <div class="d-flex">
-                        <div class="toast-body">{{ session('success') }}</div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                            aria-label="Close"></button>
-                    </div>
-                </div>
-            @endif
-        </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show toast if exists
+            var toastElement = document.getElementById('successToast');
+            if (toastElement) {
+                new bootstrap.Toast(toastElement).show();
+            }
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var toastElement = document.getElementById('successToast');
-                if (toastElement) {
-                    new bootstrap.Toast(toastElement).show();
-                }
-            });
+            // Navbar scroll effect
             const navbar = document.getElementById('mainNavbar');
-
             window.addEventListener('scroll', function() {
                 if (window.scrollY > 20) {
                     navbar.classList.add('scrolled');
@@ -287,15 +296,13 @@
                     navbar.classList.remove('scrolled');
                 }
             });
-        </script>
-
-        {{ $slot }}
-    </main>
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    @stack('scripts')
 
+    @stack('scripts')
 </body>
 
 </html>

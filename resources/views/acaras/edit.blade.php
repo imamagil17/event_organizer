@@ -72,6 +72,27 @@
                         @enderror
                     </div>
 
+                    <div class="mb-4">
+                        <label class="form-label font-weight-semibold">Pilih Vendor:</label>
+                        <div class="row">
+                            @foreach ($vendors as $vendor)
+                                <div class="col-md-6 mb-2">
+                                    <div class="form-check border rounded px-3 py-2 shadow-sm">
+                                        <input class="form-check-input" type="checkbox" name="vendors[]"
+                                            value="{{ $vendor->id }}" id="vendor_{{ $vendor->id }}"
+                                            {{ $acara->vendors->contains($vendor->id) ? 'checked' : '' }}>
+                                        <label class="form-check-label d-block" for="vendor_{{ $vendor->id }}">
+                                            <strong>{{ $vendor->nama }}</strong><br>
+                                            <small class="text-muted">{{ $vendor->jenis_layanan }}</small><br>
+                                            <span
+                                                class="badge bg-success">Rp{{ number_format($vendor->biaya, 0, ',', '.') }}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
                     <div class="form-group mb-4">
                         <label for="deskripsi" class="form-label font-weight-semibold">Deskripsi</label>
                         <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" rows="4"
@@ -88,17 +109,6 @@
                             value="{{ old('jumlah_tamu', $acara->jumlah_tamu) }}" min="0"
                             placeholder="Masukkan jumlah tamu">
                         @error('jumlah_tamu')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="form-group mb-4">
-                        <label for="total_biaya" class="form-label font-weight-semibold">Total Biaya</label>
-                        <input type="number" name="total_biaya"
-                            class="form-control @error('total_biaya') is-invalid @enderror" id="total_biaya"
-                            value="{{ old('total_biaya', $acara->total_biaya) }}" min="0" step="0.01"
-                            placeholder="Masukkan total biaya">
-                        @error('total_biaya')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -125,8 +135,8 @@
 
                     <div class="form-group mb-4">
                         <label for="feedback" class="form-label font-weight-semibold">Feedback</label>
-                        <textarea name="feedback" class="form-control @error('feedback') is-invalid @enderror" id="feedback"
-                            rows="3" placeholder="Masukkan feedback">{{ old('feedback', $acara->feedback) }}</textarea>
+                        <textarea name="feedback" class="form-control @error('feedback') is-invalid @enderror" id="feedback" rows="3"
+                            placeholder="Masukkan feedback">{{ old('feedback', $acara->feedback) }}</textarea>
                         @error('feedback')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -137,6 +147,32 @@
                         <a href="{{ route('acaras.index') }}" class="btn btn-secondary px-4 py-2">Batal</a>
                     </div>
                 </form>
+                @push('scripts')
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const vendorSelect = document.getElementById('vendors');
+                            const totalBiayaInput = document.getElementById('total_biaya');
+
+                            function updateTotalBiaya() {
+                                let total = 0;
+                                const selectedOptions = vendorSelect.selectedOptions;
+
+                                for (let option of selectedOptions) {
+                                    const biaya = parseFloat(option.getAttribute('data-biaya')) || 0;
+                                    total += biaya;
+                                }
+
+                                totalBiayaInput.value = total.toFixed(2);
+                            }
+
+                            // Trigger saat user memilih vendor
+                            vendorSelect.addEventListener('change', updateTotalBiaya);
+
+                            // Trigger saat pertama kali halaman dimuat (untuk edit)
+                            updateTotalBiaya();
+                        });
+                    </script>
+                @endpush
             </div>
         </div>
     </div>

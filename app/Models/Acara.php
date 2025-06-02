@@ -35,10 +35,11 @@ class Acara extends Model
         return $this->belongsTo(KategoriAcara::class);
     }
 
-    // Relasi Many-to-Many ke Vendor
     public function vendors()
     {
-        return $this->belongsToMany(Vendor::class, 'acara_vendor');
+        return $this->belongsToMany(Vendor::class, 'acara_vendor')
+                    ->withPivot('peran') // akses kolom tambahan
+                    ->withTimestamps();
     }
 
     // Relasi ke Jadwal Acara

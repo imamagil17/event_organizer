@@ -4,11 +4,14 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\Acara;
+use App\Models\Vendor;
 
 class AcaraSeeder extends Seeder
 {
     public function run()
     {
+        // Insert 15 data acara
         DB::table('acaras')->insert([
             ['judul' => 'Pernikahan Budi & Ani', 'tanggal' => '2025-06-10 10:00:00', 'lokasi' => 'Gedung Serbaguna Jakarta', 'kategori_acara_id' => 1, 'klien_id' => 1, 'created_at' => now(), 'updated_at' => now()],
             ['judul' => 'Ulang Tahun Rina', 'tanggal' => '2025-07-05 18:00:00', 'lokasi' => 'Restoran Bintang Lima', 'kategori_acara_id' => 2, 'klien_id' => 13, 'created_at' => now(), 'updated_at' => now()],
@@ -26,5 +29,22 @@ class AcaraSeeder extends Seeder
             ['judul' => 'Pelatihan Karyawan PT Sentosa', 'tanggal' => '2025-11-15 08:00:00', 'lokasi' => 'Hotel Santika Bandung', 'kategori_acara_id' => 14, 'klien_id' => 8, 'created_at' => now(), 'updated_at' => now()],
             ['judul' => 'Pesta Pernikahan Tradisional Joko & Rina', 'tanggal' => '2025-12-25 10:00:00', 'lokasi' => 'Balai Adat Yogyakarta', 'kategori_acara_id' => 15, 'klien_id' => 10, 'created_at' => now(), 'updated_at' => now()],
         ]);
+
+        // Ambil semua vendor untuk attach
+        $vendors = Vendor::all();
+
+        // Ambil acara yang baru saja diinsert
+        $acaras = Acara::all();
+
+        foreach ($acaras as $acara) {
+            // Attach vendor random 2-4 vendor
+            $vendorIds = $vendors->random(rand(2, 4))->pluck('id')->toArray();
+            $acara->vendors()->attach($vendorIds);
+
+            // Hitung total biaya dari vendor yang diattach
+            $totalBiaya = $acara->vendors->sum('harga');
+            $acara->total_biaya = $totalBiaya;
+            $acara->save();
+        }
     }
 }
