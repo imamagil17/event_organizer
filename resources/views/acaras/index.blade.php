@@ -53,20 +53,6 @@
                             </div>
                             <div><i class="bi bi-people-fill me-1"></i> {{ $acara->jumlah_tamu }}</div>
                             <div>Rp {{ number_format($acara->total_biaya, 0, ',', '.') }}</div>
-
-
-                            <div class="mt-3 d-flex align-items-center flex-wrap gap-2">
-                                <i class="bi bi-person-badge-fill me-1 text-primary" style="font-size: 1.2rem;"></i>
-                                <div class="vendor-list d-flex flex-wrap gap-2 mb-0">
-                                    @forelse ($acara->vendors as $vendor)
-                                        <span class="vendor-badge">
-                                            {{ $vendor->nama ?? ($vendor->nama_vendor ?? 'Vendor') }}
-                                        </span>
-                                    @empty
-                                    @endforelse
-                                </div>
-                            </div>
-
                             @if ($acara->catatan_laporan)
                                 <div><i class="bi bi-journal-text me-1"></i>
                                     {{ Str::limit($acara->catatan_laporan, 50) }}</div>
@@ -77,6 +63,17 @@
                             @if ($acara->feedback)
                                 <div><i class="bi bi-chat-dots me-1"></i> {{ Str::limit($acara->feedback, 50) }}</div>
                             @endif
+                        </div>
+                        <div class="mt-3 d-flex align-items-center flex-wrap gap-2">
+                            <i class="bi bi-person-badge-fill me-1 text-primary" style="font-size: 1.2rem;"></i>
+                            <div class="vendor-list d-flex flex-wrap gap-2 mb-0">
+                                @forelse ($acara->vendors as $vendor)
+                                    <span class="vendor-badge">
+                                        {{ $vendor->nama ?? ($vendor->nama_vendor ?? 'Vendor') }}
+                                    </span>
+                                @empty
+                                @endforelse
+                            </div>
                         </div>
                     </div>
                 </div>
