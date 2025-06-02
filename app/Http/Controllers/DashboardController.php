@@ -28,8 +28,8 @@ class DashboardController extends Controller
             ->limit(5)
             ->get()
             ->map(function ($acara) {
-                $today = Carbon::today();
-                $tanggalAcara = Carbon::parse($acara->tanggal);
+                $today = \Carbon\Carbon::now('Asia/Jakarta')->startOfDay();
+                $tanggalAcara = \Carbon\Carbon::parse($acara->tanggal, 'Asia/Jakarta')->startOfDay();
 
                 $selisih = $today->diffInDays($tanggalAcara, false);
 
@@ -37,6 +37,20 @@ class DashboardController extends Controller
                     $acara->status_waktu = 'Hari Ini';
                 } elseif ($selisih === 1) {
                     $acara->status_waktu = 'Besok';
+                } elseif ($selisih === 2) {
+                    $acara->status_waktu = 'Lusa';
+                } elseif ($selisih > 2 && $selisih <= 6) {
+                    $acara->status_waktu = "{$selisih} Hari Lagi";
+                } elseif ($selisih >= 7 && $selisih < 14) {
+                    $acara->status_waktu = 'Minggu Depan';
+                } elseif ($selisih >= 14 && $selisih < 21) {
+                    $acara->status_waktu = '2 Minggu Lagi';
+                } elseif ($selisih >= 21 && $selisih < 30) {
+                    $acara->status_waktu = '3 Minggu Lagi';
+                } elseif ($selisih >= 30 && $selisih < 60) {
+                    $acara->status_waktu = 'Bulan Depan';
+                } elseif ($selisih < 0) {
+                    $acara->status_waktu = 'Sudah Berlalu';
                 } else {
                     $acara->status_waktu = "Dalam {$selisih} Hari";
                 }
